@@ -14,11 +14,12 @@ export class AppComponent  {
 
 this.fileReaded = event.target.files[0];
  const reader: FileReader = new FileReader();
- 
     reader.readAsText(this.fileReaded);
     reader.onload = (e) =>{
        let csvData = reader.result;
         let csvRecordsArray = (<string>csvData).split(/\r\n|\n/)
+        const columname = this.getColoumHeader(csvRecordsArray)
+        console.log(columname ,'Headers')
         this.records = this.getDataRecordsArrayFromCSVFile(csvRecordsArray);
         // THIS LINE FOR IF WE GET EMPTY OBJECT AT LAST INDEX FOR REMOVE OF LAST EMPTY OBJECT THIS LINE WILL BE USED
         this.records.pop();
@@ -38,6 +39,14 @@ this.fileReaded = event.target.files[0];
         csvArr.push(csvRecord);
     }
     return csvArr;
+  }
+  getColoumHeader(csvRecordsArray){
+     let headers = (<string>csvRecordsArray[0]).split(',');
+    let ColumnheaderArray = [];
+    for(let i=0; i < csvRecordsArray.length; i++){
+      ColumnheaderArray.push(csvRecordsArray[i])
+    }
+    return ColumnheaderArray;
   }
 }
 class CSVRecord {
